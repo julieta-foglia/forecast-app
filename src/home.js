@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Spinner } from 'reactstrap';
+import { Spinner, Card, CardTitle, Row } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-const API_KEY  = 'd6048ea8be8ac8169eadd7eca605dc0f'
 
 export default class Home extends Component {
     state = {
@@ -15,45 +14,58 @@ export default class Home extends Component {
         return Object.keys(obj).length === 0
     }
     
-    componentWillMount(){
-        this.pruebaBack();
+    componentDidMount(){
         this.getCurrentLocation();
-    }
-
-    pruebaBack = async () => {
-        const response = await fetch('/current')
-        const jsonRes = await response.json()
-        console.log(jsonRes);
+        this.getWeather();
+        this.getForecast();
     }
 
     getCurrentLocation = async () => {
         const response = await fetch('/location')
         const jsonRes = await response.json()
-        this.setState({ currentLocation: jsonRes.city}, () => this.getWeather(this.state.currentLocation));
+        this.setState({ currentLocation: jsonRes.city});
     }
 
-    getWeather = async (location) => {
-        const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_KEY}&units=metric&lang=es`)
-        const weatherData = await response.json();
+    getWeather = async () => {
+        const response = await fetch('/current')
+        const {weatherData} = await response.json()
         this.setState({ weatherData });
     }
 
-    getForecast = async (location) => {
-        const response = await fetch(`http://api.openweathermap.org/data/2.5/forecast/daily?q=${location}&units=metric&lang=es&cnt=5&appid=${API_KEY}`)
-        const forecastData = await response.json();
+    getForecast = async () => {
+        const response = await fetch(`/forecast`)
+        const {forecastData} = await response.json();
+        console.log(forecastData);
         this.setState({ forecastData });
     }
 
     render() {
-        const { isLoading, currentLocation, weatherData } = this.state;
+        const { isLoading, currentLocation, weatherData, forecastData } = this.state;
+        console.log(forecastData);
+
         return isLoading || this.isEmpty(weatherData) ? <Spinner color="primary" /> : (
-            <>
-            <span>{currentLocation}</span>
-            <span>Temp: {weatherData.main.temp}</span>
-            <span>ST: {weatherData.main.feels_like}</span>
-            <span>Min: {weatherData.main.temp_min} - Max:  {weatherData.main.temp_max}</span>
-            <span>{weatherData.weather[0].description}</span>
-            </>
+            <div className="container">
+                <Row>
+                        <h1>{currentLocation}</h1>
+                            <span>Temp: {weatherData.main.temp}</span>
+                            <span>ST: {weatherData.main.feels_like}</span>
+                            <span>Min: {weatherData.main.temp_min} - Max:  {weatherData.main.temp_max}</span>
+                            <span>{weatherData.weather[0].description}</span>
+                </Row>
+                <Row>
+                {forecastData.list.map(day => {
+                    return(
+                        <Card>
+                        <CardTitle>{day.dt_txt}</CardTitle>
+                            <span>Temp: {day.main.temp}</span>
+                            <span>ST: {day.main.feels_like}</span>
+                            <span>Min: {day.main.temp_min} - Max:  {day.main.temp_max}</span>
+                            <span>{day.weather[0].description}</span>
+                        </Card>
+                    );
+                })}
+                </Row>
+            </div>
         );
     }
 }
