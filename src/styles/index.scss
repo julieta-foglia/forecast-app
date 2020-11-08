@@ -3,26 +3,30 @@
   height: 100vh;
 }
 
-
 .App {
-    text-align: center;
-  }
+  text-align: center;
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .card {
   margin-right: 1rem;
   padding: 1rem;
 }
 
-.row, .col {
+.row,
+.col {
   margin: 1rem 0;
 }
 
 .btn {
   margin: 1rem;
+}
+
+.justify-center {
+  justify-content: center;
 }

@@ -3,17 +3,22 @@ import { Col, Row } from 'reactstrap';
 
 const WeatherCard = ({ currentLocation, weatherData }) => {
   return (
-    <Row>
-      <h1>{currentLocation}</h1>
-      <Col>
-        <Row>Temp: {weatherData.main.temp}</Row>
-        <Row>ST: {weatherData.main.feels_like}</Row>
-        <Row>
-          Min: {weatherData.main.temp_min} - Max: {weatherData.main.temp_max}
-        </Row>
-        <Row>{weatherData.weather[0].description}</Row>
-      </Col>
-    </Row>
+    <div>
+      <Row className="justify-center">
+        <h1>{currentLocation}</h1>
+      </Row>
+      <Row>
+        <Col>
+          <h2>{parseFloat(weatherData.main.temp).toFixed(1)} °C</h2>
+          <h5>ST: {parseFloat(weatherData.main.feels_like).toFixed(1)} °C</h5>
+          <h5>
+            Min: {parseFloat(weatherData.main.temp_min).toFixed(1)} °C - Max:{' '}
+            {parseFloat(weatherData.main.temp_max).toFixed(1)} °C
+          </h5>
+          <h5>{weatherData.weather[0].description}</h5>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
