@@ -5,60 +5,79 @@ import Api from './api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Home extends Component {
-    state = {
-        currentLocation: '',
-        weatherData: {},
-        forecastData: {},
-        isLoading: false,
-        message: '',
-    }
+  state = {
+    currentLocation: '',
+    weatherData: {},
+    forecastData: {},
+    isLoading: false,
+    message: '',
+  };
 
-    isEmpty = (obj) => {
-        return Object.keys(obj).length === 0
-    }
-    
-    componentDidMount(){
-        this.getCurrentLocation();
-        this.getWeather();
-        this.getForecast();
-    }
+  isEmpty = (obj) => {
+    return Object.keys(obj).length === 0;
+  };
 
-    getCurrentLocation = async () => {
-        const response = await Api.getFetch('/location');
-        this.setState({ currentLocation: response.city});
-    }
+  componentDidMount() {
+    this.getCurrentLocation();
+    this.getWeather();
+    this.getForecast();
+  }
 
-    getWeather = async () => {
-        const {weatherData} = await Api.getFetch('/current')
-        this.setState({ weatherData });
-    }
+  getCurrentLocation = async () => {
+    const response = await Api.getFetch('/location');
+    this.setState({ currentLocation: response.city });
+  };
 
-    getForecast = async () => {
-        const {forecastData} = await Api.getFetch(`/forecast`)
-        this.setState({ forecastData });
-    }
+  getWeather = async () => {
+    const { weatherData } = await Api.getFetch('/current');
+    this.setState({ weatherData });
+  };
 
-    changeLocation = async (currentLocation) => {
-        this.setState({ isLoading: true })
-        const { weatherData } = await Api.getFetch(`/current/${currentLocation}`)
-        const { forecastData } = await Api.getFetch(`/forecast/${currentLocation}`)
-        this.setState({ weatherData, forecastData, currentLocation, isLoading: false, message: weatherData.message });
-    }
+  getForecast = async () => {
+    const { forecastData } = await Api.getFetch(`/forecast`);
+    this.setState({ forecastData });
+  };
 
-    render() {
-        const { isLoading, currentLocation, weatherData, forecastData, message } = this.state;
+  changeLocation = async (currentLocation) => {
+    this.setState({ isLoading: true });
+    const { weatherData } = await Api.getFetch(`/current/${currentLocation}`);
+    const { forecastData } = await Api.getFetch(`/forecast/${currentLocation}`);
+    this.setState({
+      weatherData,
+      forecastData,
+      currentLocation,
+      isLoading: false,
+      message: weatherData.message,
+    });
+  };
 
-        return isLoading || this.isEmpty(weatherData) || this.isEmpty(forecastData) ? <Spinner color="primary" /> : (
-            <div className="container">
-                <SearchBar changeLocation={this.changeLocation} />
-                {message && <h2>Ciudad no encontrada!</h2>}
-                {!message && 
-                <>
-                <WeatherCard currentLocation={currentLocation} weatherData={weatherData}/>
-                <ForecastCard forecastData={forecastData} />
-                </>
-                }
-            </div>
-        );
-    }
+  render() {
+    const {
+      isLoading,
+      currentLocation,
+      weatherData,
+      forecastData,
+      message,
+    } = this.state;
+
+    return isLoading ||
+      this.isEmpty(weatherData) ||
+      this.isEmpty(forecastData) ? (
+      <Spinner color="primary" />
+    ) : (
+      <div className="container">
+        <SearchBar changeLocation={this.changeLocation} />
+        {message && <h2>Ciudad no encontrada!</h2>}
+        {!message && (
+          <>
+            <WeatherCard
+              currentLocation={currentLocation}
+              weatherData={weatherData}
+            />
+            <ForecastCard forecastData={forecastData} />
+          </>
+        )}
+      </div>
+    );
+  }
 }
