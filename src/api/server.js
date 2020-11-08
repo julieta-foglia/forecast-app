@@ -33,8 +33,9 @@ app.get('/current/:city?', async (req, res) => {
 
     if(city)
     {
-      const weatherData = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=es`)
-      res.send({ weatherData })
+      const weatherDataRes = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=es`)
+	  const weatherData = await weatherDataRes.json();
+	  res.send({ weatherData })
     } else {
 			const response = await fetch('http://ip-api.com/json/?fields=status,message,city')
 			const location = await response.json();
@@ -52,7 +53,7 @@ app.get('/forecast/:city?', async (req, res) => {
 
 	if(city)
 	{
-		const forecastDataRes = await fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=es&cnt=1`)
+		const forecastDataRes = await fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=es&cnt=5`)
 		const forecastData = await forecastDataRes.json();
 		res.send({ forecastData })
 	} else {

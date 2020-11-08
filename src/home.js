@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Spinner, Card, CardTitle, Row } from 'reactstrap';
+import { Spinner } from 'reactstrap';
+import { WeatherCard, ForecastCard, SearchBar } from './components';
+import Api from './api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Home extends Component {
@@ -8,6 +10,7 @@ export default class Home extends Component {
         weatherData: {},
         forecastData: {},
         isLoading: false,
+        message: '',
     }
 
     isEmpty = (obj) => {
@@ -21,50 +24,40 @@ export default class Home extends Component {
     }
 
     getCurrentLocation = async () => {
-        const response = await fetch('/location')
-        const jsonRes = await response.json()
-        this.setState({ currentLocation: jsonRes.city});
+        const response = await Api.getFetch('/location');
+        this.setState({ currentLocation: response.city});
     }
 
     getWeather = async () => {
-        const response = await fetch('/current')
-        const {weatherData} = await response.json()
+        const {weatherData} = await Api.getFetch('/current')
         this.setState({ weatherData });
     }
 
     getForecast = async () => {
-        const response = await fetch(`/forecast`)
-        const {forecastData} = await response.json();
-        console.log(forecastData);
+        const {forecastData} = await Api.getFetch(`/forecast`)
         this.setState({ forecastData });
     }
 
-    render() {
-        const { isLoading, currentLocation, weatherData, forecastData } = this.state;
-        console.log(forecastData);
+    changeLocation = async (currentLocation) => {
+        this.setState({ isLoading: true })
+        const { weatherData } = await Api.getFetch(`/current/${currentLocation}`)
+        const { forecastData } = await Api.getFetch(`/forecast/${currentLocation}`)
+        this.setState({ weatherData, forecastData, currentLocation, isLoading: false, message: weatherData.message });
+    }
 
-        return isLoading || this.isEmpty(weatherData) ? <Spinner color="primary" /> : (
+    render() {
+        const { isLoading, currentLocation, weatherData, forecastData, message } = this.state;
+
+        return isLoading || this.isEmpty(weatherData) || this.isEmpty(forecastData) ? <Spinner color="primary" /> : (
             <div className="container">
-                <Row>
-                        <h1>{currentLocation}</h1>
-                            <span>Temp: {weatherData.main.temp}</span>
-                            <span>ST: {weatherData.main.feels_like}</span>
-                            <span>Min: {weatherData.main.temp_min} - Max:  {weatherData.main.temp_max}</span>
-                            <span>{weatherData.weather[0].description}</span>
-                </Row>
-                <Row>
-                {forecastData.list.map(day => {
-                    return(
-                        <Card>
-                        <CardTitle>{day.dt_txt}</CardTitle>
-                            <span>Temp: {day.main.temp}</span>
-                            <span>ST: {day.main.feels_like}</span>
-                            <span>Min: {day.main.temp_min} - Max:  {day.main.temp_max}</span>
-                            <span>{day.weather[0].description}</span>
-                        </Card>
-                    );
-                })}
-                </Row>
+                <SearchBar changeLocation={this.changeLocation} />
+                {message && <h2>Ciudad no encontrada!</h2>}
+                {!message && 
+                <>
+                <WeatherCard currentLocation={currentLocation} weatherData={weatherData}/>
+                <ForecastCard forecastData={forecastData} />
+                </>
+                }
             </div>
         );
     }
