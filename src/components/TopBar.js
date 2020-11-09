@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 import ImgIcon from '../assets/sun.png';
 
-const SearchBar = ({ changeLocation, cities, currentWeather }) => {
+const TopBar = ({ changeLocation, cities, currentWeather }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
@@ -52,4 +52,4 @@ const SearchBar = ({ changeLocation, cities, currentWeather }) => {
   );
 };
 
-export default SearchBar;
+export default TopBar;

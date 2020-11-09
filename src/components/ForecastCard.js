@@ -20,12 +20,14 @@ const ForecastCard = ({ forecastData }) => {
           return (
             <Card key={day.dt}>
               <CardTitle>{getFormattedDate(day.dt)}</CardTitle>
-              <h3>Min: {parseFloat(day.temp.min).toFixed(1)} °C</h3>
-              <h3>Max: {parseFloat(day.temp.max).toFixed(1)} °C</h3>
               <img
                 src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
               />
-              <span>{day.weather[0].description}</span>
+              <span className="margin-bottom">
+                {day.weather[0].description}
+              </span>
+              <h4>Min: {parseFloat(day.temp.min).toFixed(1)} °C</h4>
+              <h4>Max: {parseFloat(day.temp.max).toFixed(1)} °C</h4>
             </Card>
           );
         })}

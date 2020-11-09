@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Spinner } from 'reactstrap';
-import { WeatherCard, ForecastCard, SearchBar } from './components';
+import { WeatherCard, ForecastCard, TopBar } from './components';
 import Api from './api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -95,7 +95,7 @@ export default class Home extends Component {
 
     return (
       <div className="app-container">
-        <SearchBar
+        <TopBar
           changeLocation={this.changeLocation}
           currentWeather={this.getCurrentWeather}
           cities={cities}
