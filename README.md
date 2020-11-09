@@ -3,7 +3,9 @@
 ## How to run
 
 1- Clone the repository
+
 2- Cd to the project folder
+
 3- Execute
 
   ### Using Docker
