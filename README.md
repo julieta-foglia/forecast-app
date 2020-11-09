@@ -11,3 +11,4 @@
 ```
 docker-compose up -d --build
 ```
+The app will open on `localhost:3001`
