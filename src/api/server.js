@@ -52,7 +52,7 @@ app.get('/current/:city?', async (req, res) => {
     const weatherData = await weatherDataRes.json();
     res.send({ weatherData });
   } else {
-    const response = await fetch('/location');
+    const response = await fetch('http://localhost:5000/location');
     const location = await response.json();
     const weatherDataRes = await fetch(
       `https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&exclude=minutely,hourly,daily,alerts&appid=${API_KEY}&units=metric&lang=es`
@@ -76,7 +76,7 @@ app.get('/forecast/:city?', async (req, res) => {
     const forecastData = await forecastDataRes.json();
     res.send({ forecastData });
   } else {
-    const response = await fetch('/location');
+    const response = await fetch('http://localhost:5000/location');
     const location = await response.json();
     const forecastDataRes = await fetch(
       `https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&exclude=minutely,hourly,current,alerts&appid=${API_KEY}&units=metric&lang=es`

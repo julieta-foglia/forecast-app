@@ -10,7 +10,7 @@ const WeatherCard = ({ currentLocation, weatherData }) => {
       </Col>
       <Row>
         <Col>
-          <h2>{parseFloat(weatherData.temp).toFixed(1)} °C</h2>
+          <h1>{parseFloat(weatherData.temp).toFixed(1)} °C</h1>
           <img
             src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
           />

@@ -1,11 +1,13 @@
-FROM node:alpine
+FROM node:10
 
-WORKDIR /forecast-app
+WORKDIR /usr/src/app
 
-COPY package.json /forecast-app
+COPY package*.json ./
 
-RUN yarn install
+RUN npm install
 
-COPY . /forecast-app
+COPY . .
 
-CMD ["npm", "start"]
+EXPOSE 3000
+
+CMD ["yarn", "run", "execute"]
