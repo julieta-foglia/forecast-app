@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Home extends Component {
   state = {
-    currentLocation: '',
+    currentLocation: {},
     weatherData: {},
     forecastData: {},
     isLoading: false,
@@ -25,12 +25,15 @@ export default class Home extends Component {
 
   getCurrentLocation = async () => {
     const response = await Api.getFetch('/location');
-    this.setState({ currentLocation: response.city });
+    this.setState({
+      currentLocation: { city: response.city, country: response.country },
+    });
   };
 
   getWeather = async () => {
     const { weatherData } = await Api.getFetch('/current');
-    this.setState({ weatherData });
+    const { current } = weatherData;
+    this.setState({ weatherData: current });
   };
 
   getForecast = async () => {
@@ -38,14 +41,17 @@ export default class Home extends Component {
     this.setState({ forecastData });
   };
 
-  changeLocation = async (currentLocation) => {
+  changeLocation = async ({ city, country }) => {
     this.setState({ isLoading: true });
-    const { weatherData } = await Api.getFetch(`/current/${currentLocation}`);
-    const { forecastData } = await Api.getFetch(`/forecast/${currentLocation}`);
+    const { weatherData } = await Api.getFetch(`/current/${city}`);
+    const { forecastData } = await Api.getFetch(`/forecast/${city}`);
     this.setState({
       weatherData,
       forecastData,
-      currentLocation,
+      currentLocation: {
+        city: city,
+        country: country || weatherData.sys.country,
+      },
       isLoading: false,
       message: weatherData.message,
     });

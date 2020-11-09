@@ -1,0 +1,12 @@
+version: '1.0'
+services:
+  client:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3002:3002'
+    volumes:
+      - '/forecast-app/node_modules'
+      - './:/forecast-app'

@@ -1,24 +1,27 @@
 import React from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Card } from 'reactstrap';
+import { WiDaySunny } from 'weather-icons-react';
 
 const WeatherCard = ({ currentLocation, weatherData }) => {
   return (
-    <div>
-      <Row className="justify-center">
-        <h1>{currentLocation}</h1>
-      </Row>
+    <Card>
+      <Col className="justify-center align-self-center">
+        <h1>{currentLocation.city}</h1>
+        <h5>{currentLocation.country}</h5>
+      </Col>
       <Row>
         <Col>
-          <h2>{parseFloat(weatherData.main.temp).toFixed(1)} °C</h2>
-          <h5>ST: {parseFloat(weatherData.main.feels_like).toFixed(1)} °C</h5>
-          <h5>
-            Min: {parseFloat(weatherData.main.temp_min).toFixed(1)} °C - Max:{' '}
-            {parseFloat(weatherData.main.temp_max).toFixed(1)} °C
-          </h5>
+          <h2>{parseFloat(weatherData.temp).toFixed(1)} °C</h2>
+          <img
+            src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+          />
           <h5>{weatherData.weather[0].description}</h5>
+          <h5 className="margin-top">
+            ST: {parseFloat(weatherData.feels_like).toFixed(1)} °C
+          </h5>
         </Col>
       </Row>
-    </div>
+    </Card>
   );
 };
 

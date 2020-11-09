@@ -19,14 +19,18 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 /* /location
 Devuelve los datos de ubicación city según ip-api. */
 app.get('/location', (req, res) => {
-  request('http://ip-api.com/json/?fields=status,message,city', function (
-    error,
-    response,
-    body
-  ) {
-    const obj = JSON.parse(body);
-    res.send({ city: obj.city });
-  });
+  request(
+    'http://ip-api.com/json/?fields=status,message,city,country,lat,lon',
+    function (error, response, body) {
+      const obj = JSON.parse(body);
+      res.send({
+        city: obj.city,
+        country: obj.country,
+        lat: obj.lat,
+        lon: obj.lon,
+      });
+    }
+  );
 });
 
 /* /current[/city]
@@ -43,11 +47,11 @@ app.get('/current/:city?', async (req, res) => {
     res.send({ weatherData });
   } else {
     const response = await fetch(
-      'http://ip-api.com/json/?fields=status,message,city'
+      'http://ip-api.com/json/?fields=status,message,lat,lon'
     );
     const location = await response.json();
     const weatherDataRes = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${location.city}&appid=${API_KEY}&units=metric&lang=es`
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&exclude=minutely,hourly,daily,alerts&appid=${API_KEY}&units=metric&lang=es`
     );
     const weatherData = await weatherDataRes.json();
     res.send({ weatherData });
