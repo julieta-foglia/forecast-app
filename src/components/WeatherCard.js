@@ -1,6 +1,5 @@
 import React from 'react';
 import { Col, Row, Card } from 'reactstrap';
-import { WiDaySunny } from 'weather-icons-react';
 
 const WeatherCard = ({ currentLocation, weatherData }) => {
   return (

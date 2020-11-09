@@ -1,19 +1,27 @@
 import React from 'react';
 import { Card, CardTitle, Row } from 'reactstrap';
+const options = {
+  weekday: 'long',
+};
 
 const ForecastCard = ({ forecastData }) => {
-  console.log(forecastData);
+  const getFormattedDate = (timestamp) => {
+    const event = new Date(timestamp * 1000);
+    return event.toLocaleDateString('es-ES', options);
+  };
+
   return (
     <>
       <Row>
         <h4 className="margin-top">Pronóstico del Tiempo</h4>
       </Row>
       <Row>
-        {forecastData.list.map((day) => {
+        {forecastData.map((day) => {
           return (
-            <Card key={day.dt_txt}>
-              <CardTitle>{day.dt_txt}</CardTitle>
-              <h3>{parseFloat(day.main.temp).toFixed(1)} °C</h3>
+            <Card key={day.dt}>
+              <CardTitle>{getFormattedDate(day.dt)}</CardTitle>
+              <h3>Min: {parseFloat(day.temp.min).toFixed(1)} °C</h3>
+              <h3>Max: {parseFloat(day.temp.max).toFixed(1)} °C</h3>
               <img
                 src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
               />

@@ -11,6 +11,7 @@ export default class Home extends Component {
     forecastData: {},
     isLoading: false,
     message: '',
+    cities: {},
   };
 
   isEmpty = (obj) => {
@@ -18,16 +19,31 @@ export default class Home extends Component {
   };
 
   componentDidMount() {
-    this.getCurrentLocation();
-    this.getWeather();
-    this.getForecast();
+    this.getCities();
+    this.getCurrentWeather();
   }
 
   getCurrentLocation = async () => {
     const response = await Api.getFetch('/location');
     this.setState({
-      currentLocation: { city: response.city, country: response.country },
+      currentLocation: {
+        city: response.city,
+        country: response.country,
+        lat: response.lat,
+        lon: response.lon,
+      },
     });
+  };
+
+  getCurrentWeather() {
+    this.getCurrentLocation();
+    this.getWeather();
+    this.getForecast();
+  }
+
+  getCities = async () => {
+    const { cities } = await Api.getFetch('/cities');
+    this.setState({ cities });
   };
 
   getWeather = async () => {
@@ -38,19 +54,31 @@ export default class Home extends Component {
 
   getForecast = async () => {
     const { forecastData } = await Api.getFetch(`/forecast`);
-    this.setState({ forecastData });
+    let { daily } = forecastData;
+    daily = daily.filter(
+      (dia) => daily.indexOf(dia) > 0 && daily.indexOf(dia) < 6
+    );
+    this.setState({ forecastData: daily });
   };
 
   changeLocation = async ({ city, country }) => {
     this.setState({ isLoading: true });
+
     const { weatherData } = await Api.getFetch(`/current/${city}`);
+    const { current } = weatherData;
+
     const { forecastData } = await Api.getFetch(`/forecast/${city}`);
+    let { daily } = forecastData;
+    daily = daily.filter(
+      (dia) => daily.indexOf(dia) > 0 && daily.indexOf(dia) < 6
+    );
+
     this.setState({
-      weatherData,
-      forecastData,
+      weatherData: current,
+      forecastData: daily,
       currentLocation: {
         city: city,
-        country: country || weatherData.sys.country,
+        country: country,
       },
       isLoading: false,
       message: weatherData.message,
@@ -64,15 +92,22 @@ export default class Home extends Component {
       weatherData,
       forecastData,
       message,
+      cities,
     } = this.state;
 
     return isLoading ||
       this.isEmpty(weatherData) ||
       this.isEmpty(forecastData) ? (
-      <Spinner color="primary" />
+      <div className="centered">
+        <Spinner color="primary" />
+      </div>
     ) : (
       <div className="container">
-        <SearchBar changeLocation={this.changeLocation} />
+        <SearchBar
+          changeLocation={this.changeLocation}
+          currentWeather={this.getCurrentWeather}
+          cities={cities}
+        />
         {message && <h2>Ciudad no encontrada!</h2>}
         {!message && (
           <>

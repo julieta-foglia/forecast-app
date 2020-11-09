@@ -1,31 +1,46 @@
 import React, { useState } from 'react';
 import { Row, Col, Input, Button } from 'reactstrap';
-import CITIES_DATA from '../constants/citiesData';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 import Api from '../api';
 
-const SearchBar = ({ changeLocation }) => {
-  const [location, setLocation] = useState();
+const SearchBar = ({ changeLocation, cities, currentWeather }) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleClick = () => {
-    changeLocation({ city: location, country: '' });
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
+
+  const handleClick = (item) => {
+    changeLocation({
+      city: item.target.name,
+    });
   };
 
   const handleClickActual = async () => {
-    const response = await Api.getFetch('/location');
-    changeLocation({ city: response.city, country: response.country });
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleClick();
-    }
+    currentWeather();
   };
 
   return (
-    <Row>
-      {CITIES_DATA.map((item) => {
-        return <Button key={item.city}>{item.city}</Button>;
-      })}
+    <Row className="w-100">
+      <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        <DropdownToggle caret>Seleccionar Ciudad</DropdownToggle>
+        <DropdownMenu>
+          {cities.map((item) => {
+            return (
+              <DropdownItem
+                key={item.city}
+                name={item.city}
+                onClick={(item) => handleClick(item)}
+              >
+                {item.city}, {item.country}
+              </DropdownItem>
+            );
+          })}
+        </DropdownMenu>
+      </Dropdown>
       <Button onClick={handleClickActual}> Ciudad Actual </Button>
     </Row>
   );

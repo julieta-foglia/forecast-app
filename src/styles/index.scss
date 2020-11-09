@@ -14,7 +14,7 @@
 }
 
 .card {
-  margin: 0 1rem 1rem 1rem;
+  margin: 0 0 1rem 1rem;
   padding: 1rem;
   border-radius: 1rem !important;
   box-shadow: 4px -1px 17px 8px rgba(0, 0, 0, 0.2), 0 1px 6px rgba(0, 0, 0, 0.2);
@@ -26,7 +26,7 @@
 }
 
 .btn {
-  margin: 1rem;
+  margin: 1rem 0.5rem;
 }
 
 .justify-center {
@@ -45,4 +45,11 @@ img {
   height: 50px;
   width: 50px;
   align-self: center;
+}
+
+.centered {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
