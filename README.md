@@ -2,12 +2,12 @@
 
 ## How to run
 
-1- Clone the repo
+1- Clone the repository
 
 2- Cd to the project folder
 
 3- Execute
 
-´´´
+```
 docker-compose up -d --build
-´´´
+```
