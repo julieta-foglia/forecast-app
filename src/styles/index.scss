@@ -1,13 +1,21 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
 #root {
   background-color: #f8f8f8;
-  height: 100vh;
+  height: 100%;
 }
 
 .App {
   text-align: center;
 }
 
-.container {
+.app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,12 +33,20 @@
   margin: 1rem;
 }
 
+.flex {
+  display: flex;
+}
+
 .btn {
   margin: 1rem 0.5rem;
 }
 
 .justify-center {
   justify-content: center;
+}
+
+.align-center {
+  align-items: center;
 }
 
 .align-self-center {
@@ -47,9 +63,24 @@ img {
   align-self: center;
 }
 
+.square-img {
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .centered {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.search-bar {
+  padding: 0 1rem;
+  background-color: #d7d7d752;
+  margin: 0 0 1rem 0 !important;
+  justify-content: space-between;
+  width: 100%;
 }

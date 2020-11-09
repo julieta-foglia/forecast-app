@@ -10,8 +10,7 @@ export default class Home extends Component {
     weatherData: {},
     forecastData: {},
     isLoading: false,
-    message: '',
-    cities: {},
+    cities: [],
   };
 
   isEmpty = (obj) => {
@@ -35,11 +34,13 @@ export default class Home extends Component {
     });
   };
 
-  getCurrentWeather() {
+  getCurrentWeather = async () => {
+    this.setState({ isLoading: true });
     this.getCurrentLocation();
-    this.getWeather();
-    this.getForecast();
-  }
+    await this.getWeather();
+    await this.getForecast();
+    this.setState({ isLoading: false });
+  };
 
   getCities = async () => {
     const { cities } = await Api.getFetch('/cities');
@@ -81,35 +82,29 @@ export default class Home extends Component {
         country: country,
       },
       isLoading: false,
-      message: weatherData.message,
     });
   };
 
-  render() {
-    const {
-      isLoading,
-      currentLocation,
-      weatherData,
-      forecastData,
-      message,
-      cities,
-    } = this.state;
+  isFetching = () =>
+    this.state.isLoading ||
+    this.isEmpty(this.state.weatherData) ||
+    this.isEmpty(this.state.forecastData);
 
-    return isLoading ||
-      this.isEmpty(weatherData) ||
-      this.isEmpty(forecastData) ? (
-      <div className="centered">
-        <Spinner color="primary" />
-      </div>
-    ) : (
-      <div className="container">
+  render() {
+    const { currentLocation, weatherData, forecastData, cities } = this.state;
+
+    return (
+      <div className="app-container">
         <SearchBar
           changeLocation={this.changeLocation}
           currentWeather={this.getCurrentWeather}
           cities={cities}
         />
-        {message && <h2>Ciudad no encontrada!</h2>}
-        {!message && (
+        {this.isFetching() ? (
+          <div className="centered">
+            <Spinner type="grow" color="warning" />
+          </div>
+        ) : (
           <>
             <WeatherCard
               currentLocation={currentLocation}

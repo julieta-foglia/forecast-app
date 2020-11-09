@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Row, Col, Input, Button } from 'reactstrap';
+import { Row, Button } from 'reactstrap';
 import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import Api from '../api';
+import ImgIcon from '../assets/sun.png';
 
 const SearchBar = ({ changeLocation, cities, currentWeather }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -24,24 +24,30 @@ const SearchBar = ({ changeLocation, cities, currentWeather }) => {
   };
 
   return (
-    <Row className="w-100">
-      <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-        <DropdownToggle caret>Seleccionar Ciudad</DropdownToggle>
-        <DropdownMenu>
-          {cities.map((item) => {
-            return (
-              <DropdownItem
-                key={item.city}
-                name={item.city}
-                onClick={(item) => handleClick(item)}
-              >
-                {item.city}, {item.country}
-              </DropdownItem>
-            );
-          })}
-        </DropdownMenu>
-      </Dropdown>
-      <Button onClick={handleClickActual}> Ciudad Actual </Button>
+    <Row className="search-bar">
+      <div className="flex align-center">
+        <img className="square-img" src={ImgIcon} />
+        <h3>ForecastApp</h3>
+      </div>
+      <div className="flex">
+        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+          <DropdownToggle caret>Seleccionar Ciudad</DropdownToggle>
+          <DropdownMenu>
+            {cities.map((item) => {
+              return (
+                <DropdownItem
+                  key={item.city}
+                  name={item.city}
+                  onClick={(item) => handleClick(item)}
+                >
+                  {item.city}, {item.country}
+                </DropdownItem>
+              );
+            })}
+          </DropdownMenu>
+        </Dropdown>
+        <Button onClick={handleClickActual}> Ciudad Actual </Button>
+      </div>
     </Row>
   );
 };

@@ -15,7 +15,7 @@ const ForecastCard = ({ forecastData }) => {
       <Row>
         <h4 className="margin-top">Pronóstico del Tiempo</h4>
       </Row>
-      <Row>
+      <Row className="justify-center">
         {forecastData.map((day) => {
           return (
             <Card key={day.dt}>
